@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 # package_name = "~=1.1.0"
 
 [tool.ruff]
-line-length = 110
+line-length = 80
 target-version = "py310"
 
 [tool.ruff.lint]

@@ -8,7 +8,8 @@
   "key_id",
   "webhook_secret",
   "column_break_inxs",
-  "key_secret"
+  "key_secret",
+  "allow_guest_checkout"
  ],
  "fields": [
   {
@@ -29,12 +30,18 @@
    "fieldname": "webhook_secret",
    "fieldtype": "Password",
    "label": "Webhook Secret"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_guest_checkout",
+   "fieldtype": "Check",
+   "label": "Allow Guest Checkout?"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-05-08 22:43:51.528449",
+ "modified": "2024-05-08 23:33:26.634831",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Settings",
