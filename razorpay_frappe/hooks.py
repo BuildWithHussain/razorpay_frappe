@@ -8,6 +8,10 @@ app_license = "mit"
 
 export_python_type_annotations = True
 
+page_renderer = [
+	"razorpay_frappe.rzp_renderer.RazorpayEndpointHandler"
+]
+
 # Includes in <head>
 # ------------------
 
