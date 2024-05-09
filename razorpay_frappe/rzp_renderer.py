@@ -9,6 +9,7 @@ from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order 
 )
 from razorpay_frappe.utils import verify_webhook_signature
 
+BASE_API_PATH = "razorpay-api/"
 
 class Endpoints(StrEnum):
 	SUCCESS_HANDLER = "success-handler"
@@ -24,7 +25,7 @@ class RazorpayEndpointHandler:
 		self.endpoint: Endpoints = None
 
 	def can_render(self) -> bool:
-		if not self.path.startswith("razorpay/"):
+		if not self.path.startswith(BASE_API_PATH):
 			return False
 
 		parts = self.path.split("/")
