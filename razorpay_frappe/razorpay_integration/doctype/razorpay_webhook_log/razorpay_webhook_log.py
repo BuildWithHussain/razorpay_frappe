@@ -15,6 +15,10 @@ class RazorpayWebhookLog(Document):
 		from frappe.types import DF
 
 		amended_from: DF.Link | None
+		event: DF.Data | None
+		order_id: DF.Data | None
+		payload: DF.Code | None
+		payment_id: DF.Data | None
 	# end: auto-generated types
 
 	pass
