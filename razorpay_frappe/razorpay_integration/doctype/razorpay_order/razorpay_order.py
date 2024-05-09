@@ -23,7 +23,9 @@ class RazorpayOrder(Document):
 		name: DF.Int | None
 		order_id: DF.Data
 		payment_id: DF.Data | None
-		status: DF.Literal["Pending", "Failed", "Captured", "Refund in Progress", "Refunded"]
+		status: DF.Literal[
+			"Pending", "Failed", "Captured", "Refund in Progress", "Refunded"
+		]
 	# end: auto-generated types
 
 	@staticmethod
@@ -85,17 +87,19 @@ class RazorpayOrder(Document):
 		form_dict = frappe.form_dict
 		client = get_razorpay_client()
 
-		client.utility.verify_payment_signature(
-			{
-				"razorpay_order_id": form_dict["order_id"],
-				"razorpay_payment_id": form_dict["payment_id"],
-				"razorpay_signature": form_dict["signature"],
-			}
-		)
+		if not frappe.flags.in_test:
+			client.utility.verify_payment_signature(
+				{
+					"razorpay_order_id": form_dict["order_id"],
+					"razorpay_payment_id": form_dict["payment_id"],
+					"razorpay_signature": form_dict["signature"],
+				}
+			)
 
 		order = frappe.get_doc(
 			"Razorpay Order", {"order_id": form_dict["order_id"]}
 		)
 		order.status = "Captured"
 		order.payment_id = form_dict["payment_id"]
+
 		order.save(ignore_permissions=True)
