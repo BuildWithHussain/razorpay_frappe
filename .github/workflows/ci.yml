@@ -7,6 +7,10 @@ on:
       - main
   pull_request:
 
+env:
+  RZP_SANDBOX_KEY_ID: ${{ secrets.RZP_SANDBOX_KEY_ID }}
+  RZP_SANDBOX_KEY_SECRET: ${{ secrets.RZP_SANDBOX_KEY_SECRET }}
+
 concurrency:
   group: develop-razorpay_frappe-${{ github.event.number }}
   cancel-in-progress: true
