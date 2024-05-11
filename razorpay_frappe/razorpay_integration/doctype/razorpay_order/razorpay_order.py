@@ -17,15 +17,19 @@ class RazorpayOrder(Document):
 		from frappe.types import DF
 
 		amount: DF.Currency
+		contact: DF.Data | None
 		currency: DF.Link | None
 		customer_email: DF.Data | None
+		fee: DF.Currency
 		meta_data: DF.Code | None
+		method: DF.Data | None
 		name: DF.Int | None
 		order_id: DF.Data
 		payment_id: DF.Data | None
 		status: DF.Literal[
 			"Pending", "Failed", "Paid", "Refund in Progress", "Refunded"
 		]
+		tax: DF.Currency
 	# end: auto-generated types
 
 	@staticmethod
@@ -125,6 +129,9 @@ class RazorpayOrder(Document):
 			elif payments[0]["status"] == "refunded":
 				self.status = "Refunded"
 				self.save()
+		elif order["status"] == "created" and self.status != "Pending":
+			self.status = "Pending"
+			self.save()
 
 	@property
 	def is_paid(self):
