@@ -88,3 +88,44 @@ class RazorpayOrder(Document):
 		order.payment_id = payment_id
 
 		order.save(ignore_permissions=True)
+
+	@frappe.whitelist()
+	def refund(self):
+		frappe.only_for("System Manager")
+
+		if not self.is_paid:
+			frappe.throw("Refunds Can be Made Only on Paid Payments!")
+
+		client = get_razorpay_client()
+		refund_amount = int(get_in_razorpay_money(self.amount))
+		refund = client.payment.refund(self.payment_id, refund_amount)
+
+		self.refund_id = refund["id"]
+		if refund["status"] == "processed":
+			self.status = "Refunded"
+		elif refund["status"] == "pending":
+			self.status = "Refund Pending"
+
+		self.save()
+
+		return refund["status"]
+
+	@frappe.whitelist()
+	def sync_status(self):
+		client = get_razorpay_client()
+		order = client.order.fetch(self.order_id)
+		payments = client.order.payments(self.order_id).get("items", [])
+
+		if order["status"] == "paid":
+			frappe.errprint(payments)
+			if payments[0]["status"] == "captured" and self.status != "Paid":
+				self.status = "Paid"
+				self.payment_id = payments[0]["id"]
+				self.save()
+			elif payments[0]["status"] == "refunded":
+				self.status = "Refunded"
+				self.save()
+
+	@property
+	def is_paid(self):
+		return self.status == "Paid"
