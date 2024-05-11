@@ -27,6 +27,10 @@ def get_in_razorpay_money(amount: int) -> int:
 	return amount * 100
 
 
+def convert_from_razorpay_money(amount: int) -> int:
+	return amount // 100
+
+
 def verify_webhook_signature(payload):
 	signature = frappe.get_request_header("X-Razorpay-Signature")
 	webhook_secret = get_decrypted_password(

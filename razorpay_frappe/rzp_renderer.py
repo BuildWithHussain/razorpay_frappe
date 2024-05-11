@@ -7,7 +7,10 @@ from werkzeug.wrappers import Response
 from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order import (
 	RazorpayOrder,
 )
-from razorpay_frappe.utils import verify_webhook_signature
+from razorpay_frappe.utils import (
+	convert_from_razorpay_money,
+	verify_webhook_signature,
+)
 
 BASE_API_PATH = "razorpay-api/"
 
@@ -110,6 +113,14 @@ class RazorpayEndpointHandler:
 
 		if event == "payment.captured" and order_doc.status != "Paid":
 			order_doc.status = "Paid"
+			order_doc.fee = convert_from_razorpay_money(
+				payment_entity.get("fee", 0)
+			)
+			order_doc.tax = convert_from_razorpay_money(
+				payment_entity.get("tax", 0)
+			)
+			order_doc.method = payment_entity.get("method")
+			order_doc.contact = payment_entity.get("contact")
 		elif event == "refund.processed" and not order_doc.status == "Refunded":
 			refund_entity = payload["payload"]["refund"]["entity"]
 			order_doc.status = "Refunded"
