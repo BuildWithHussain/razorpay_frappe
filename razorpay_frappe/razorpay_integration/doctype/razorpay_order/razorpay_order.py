@@ -24,7 +24,7 @@ class RazorpayOrder(Document):
 		order_id: DF.Data
 		payment_id: DF.Data | None
 		status: DF.Literal[
-			"Pending", "Failed", "Captured", "Refund in Progress", "Refunded"
+			"Pending", "Failed", "Paid", "Refund in Progress", "Refunded"
 		]
 	# end: auto-generated types
 
@@ -84,7 +84,7 @@ class RazorpayOrder(Document):
 			)
 
 		order = frappe.get_doc("Razorpay Order", {"order_id": order_id})
-		order.status = "Captured"
+		order.status = "Paid"
 		order.payment_id = payment_id
 
 		order.save(ignore_permissions=True)

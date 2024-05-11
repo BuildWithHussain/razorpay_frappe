@@ -24,7 +24,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Pending\nFailed\nCaptured\nRefund in Progress\nRefunded",
+   "options": "Pending\nFailed\nPaid\nRefund in Progress\nRefunded",
    "read_only": 1,
    "sort_options": 1
   },
@@ -125,7 +125,7 @@
   },
   {
    "color": "Green",
-   "title": "Captured"
+   "title": "Paid"
   },
   {
    "color": "Purple",
