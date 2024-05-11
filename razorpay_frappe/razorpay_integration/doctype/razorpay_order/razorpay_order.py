@@ -29,16 +29,7 @@ class RazorpayOrder(Document):
 	# end: auto-generated types
 
 	@staticmethod
-	def initiate():
-		form_dict = frappe.form_dict
-		amount = form_dict["amount"]
-		currency = form_dict.get("currency", "INR")
-		meta_data = form_dict.get("meta_data", {})
-
-		return RazorpayOrder.create(amount, currency, meta_data)
-
-	@staticmethod
-	def create(
+	def initiate(
 		amount: int, currency: str = "INR", meta_data: dict | None = None
 	) -> dict:
 		if meta_data is None:
@@ -66,10 +57,7 @@ class RazorpayOrder(Document):
 		return {"key_id": client.auth[0], "order_id": _order["id"]}
 
 	@staticmethod
-	def handle_failure():
-		form_dict = frappe.form_dict
-		order_id = form_dict["order_id"]
-
+	def handle_failure(order_id: str):
 		if frappe.db.exists("Razorpay Order", {"order_id": order_id}):
 			doc: RazorpayOrder = frappe.get_doc(
 				"Razorpay Order", {"order_id": order_id}
@@ -83,23 +71,20 @@ class RazorpayOrder(Document):
 		self.save(ignore_permissions=True)
 
 	@staticmethod
-	def handle_success():
-		form_dict = frappe.form_dict
+	def handle_success(order_id: str, payment_id: str, signature: str):
 		client = get_razorpay_client()
 
 		if not frappe.flags.in_test:
 			client.utility.verify_payment_signature(
 				{
-					"razorpay_order_id": form_dict["order_id"],
-					"razorpay_payment_id": form_dict["payment_id"],
-					"razorpay_signature": form_dict["signature"],
+					"razorpay_order_id": order_id,
+					"razorpay_payment_id": payment_id,
+					"razorpay_signature": signature,
 				}
 			)
 
-		order = frappe.get_doc(
-			"Razorpay Order", {"order_id": form_dict["order_id"]}
-		)
+		order = frappe.get_doc("Razorpay Order", {"order_id": order_id})
 		order.status = "Captured"
-		order.payment_id = form_dict["payment_id"]
+		order.payment_id = payment_id
 
 		order.save(ignore_permissions=True)

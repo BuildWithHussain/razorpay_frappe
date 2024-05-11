@@ -11,6 +11,7 @@ from razorpay_frappe.utils import verify_webhook_signature
 
 BASE_API_PATH = "razorpay-api/"
 
+
 class Endpoints(StrEnum):
 	SUCCESS_HANDLER = "success-handler"
 	FAILURE_HANDLER = "failure-handler"
@@ -42,17 +43,29 @@ class RazorpayEndpointHandler:
 	def render(self) -> Response:
 		response = None
 
+		self.check_permissions()
+
 		if self.endpoint == Endpoints.INITIATE_ORDER:
-			response = RazorpayOrder.initiate()
+			amount = frappe.form_dict["amount"]
+			currency = frappe.form_dict.get("currency", "INR")
+			meta_data = frappe.form_dict.get("meta_data")
+
+			response = RazorpayOrder.initiate(amount, currency, meta_data)
 
 		elif self.endpoint == Endpoints.FAILURE_HANDLER:
-			response = RazorpayOrder.handle_failure()
+			order_id = frappe.form_dict["order_id"]
+			response = RazorpayOrder.handle_failure(order_id)
 
 		elif self.endpoint == Endpoints.WEBHOOK_HANDLER:
 			response = self.handle_webhook()
 
 		elif self.endpoint == Endpoints.SUCCESS_HANDLER:
-			response = RazorpayOrder.handle_success()
+			order_id = frappe.form_dict["order_id"]
+			payment_id = frappe.form_dict["payment_id"]
+			signature = frappe.form_dict["signature"]
+			response = RazorpayOrder.handle_success(
+				order_id, payment_id, signature
+			)
 
 		frappe.response["data"] = response
 		return build_response("json")
@@ -104,3 +117,15 @@ class RazorpayEndpointHandler:
 		order_doc.save()
 
 		frappe.set_user(current_user)
+
+	def check_permissions(self):
+		settings = frappe.get_cached_doc("Razorpay Settings")
+
+		if self.endpoint == Endpoints.WEBHOOK_HANDLER:
+			return
+
+		if not settings.allow_guest_checkout and frappe.session.user == "Guest":
+			frappe.throw(
+				"You are not permitted to access this endpoint",
+				frappe.PermissionError,
+			)
