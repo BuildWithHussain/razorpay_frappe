@@ -12,8 +12,12 @@
   "currency",
   "payment_section",
   "payment_id",
+  "fee",
+  "tax",
   "column_break_sqkm",
   "customer_email",
+  "method",
+  "contact",
   "meta_section",
   "meta_data"
  ],
@@ -87,11 +91,37 @@
    "fieldtype": "Data",
    "label": "Customer Email",
    "read_only": 1
+  },
+  {
+   "fieldname": "fee",
+   "fieldtype": "Currency",
+   "label": "Fee",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "method",
+   "fieldtype": "Data",
+   "label": "Method",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax",
+   "fieldtype": "Currency",
+   "label": "Tax",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contact",
+   "fieldtype": "Data",
+   "label": "Contact",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-09 01:14:52.999071",
+ "modified": "2024-05-11 19:02:11.663099",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Order",
@@ -136,5 +166,7 @@
    "title": "Refund Pending"
   }
  ],
- "title_field": "order_id"
+ "title_field": "order_id",
+ "track_changes": 1,
+ "track_seen": 1
 }
