@@ -75,15 +75,17 @@ class RazorpayEndpointHandler:
 		payload = frappe.request.get_data()
 
 		verify_webhook_signature(payload)
+		self.process_webhook_payload(form_dict)
 
+	def process_webhook_payload(self, payload: dict):
 		current_user = frappe.session.user
 		frappe.set_user("Administrator")
 
-		payment_entity = form_dict["payload"]["payment"]["entity"]
+		payment_entity = payload["payload"]["payment"]["entity"]
 		razorpay_order_id = payment_entity["order_id"]
 		razorpay_payment_id = payment_entity["id"]
 		customer_email = payment_entity["email"]
-		event = form_dict.get("event")
+		event = payload.get("event")
 
 		frappe.get_doc(
 			{
@@ -91,7 +93,7 @@ class RazorpayEndpointHandler:
 				"event": event,
 				"order_id": razorpay_order_id,
 				"payment_id": razorpay_payment_id,
-				"payload": frappe.as_json(form_dict, indent=2),
+				"payload": frappe.as_json(payload, indent=2),
 			}
 		).insert().submit()
 
@@ -106,10 +108,10 @@ class RazorpayEndpointHandler:
 			"Razorpay Order", {"order_id": razorpay_order_id}
 		)
 
-		if event == "payment.captured" and not order_doc.status != "Captured":
-			order_doc.status = "Captured"
+		if event == "payment.captured" and order_doc.status != "Paid":
+			order_doc.status = "Paid"
 		elif event == "refund.processed" and not order_doc.status == "Refunded":
-			refund_entity = form_dict["payload"]["refund"]["entity"]
+			refund_entity = payload["payload"]["refund"]["entity"]
 			order_doc.status = "Refunded"
 			order_doc.refund_id = refund_entity["id"]
 
