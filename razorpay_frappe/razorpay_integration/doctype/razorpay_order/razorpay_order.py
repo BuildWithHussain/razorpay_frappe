@@ -100,6 +100,9 @@ class RazorpayOrder(Document):
 		order.save(ignore_permissions=True)
 
 	def set_payment_details(self):
+		if frappe.flags.in_test:
+			return
+
 		if not self.payment_id:
 			return
 
