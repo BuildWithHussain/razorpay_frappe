@@ -110,6 +110,7 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:Boolean(doc.payment_id)",
    "fieldname": "tax",
    "fieldtype": "Currency",
    "label": "Tax",
@@ -125,7 +126,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-11 23:30:32.885286",
+ "modified": "2024-05-12 14:44:00.993266",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Order",
