@@ -30,6 +30,8 @@ class RazorpayOrder(Document):
 		name: DF.Int | None
 		order_id: DF.Data
 		payment_id: DF.Data | None
+		ref_dn: DF.DynamicLink | None
+		ref_dt: DF.Link | None
 		status: DF.Literal[
 			"Pending", "Failed", "Paid", "Refund in Progress", "Refunded"
 		]
@@ -38,7 +40,11 @@ class RazorpayOrder(Document):
 
 	@staticmethod
 	def initiate(
-		amount: int, currency: str = "INR", meta_data: dict | None = None
+		amount: int,
+		currency: str = "INR",
+		meta_data: dict | None = None,
+		ref_dt: str | None = None,
+		ref_dn: str | None = None,
 	) -> dict:
 		if meta_data is None:
 			meta_data = {}
@@ -59,6 +65,8 @@ class RazorpayOrder(Document):
 			currency=currency,
 			meta_data=meta_data,
 			status="Pending",
+			ref_dt=ref_dt,
+			ref_dn=ref_dn,
 		)
 		order_doc.insert(ignore_permissions=True)
 

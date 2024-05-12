@@ -52,8 +52,12 @@ class RazorpayEndpointHandler:
 			amount = frappe.form_dict["amount"]
 			currency = frappe.form_dict.get("currency", "INR")
 			meta_data = frappe.form_dict.get("meta_data")
+			ref_dt = frappe.form_dict.get("ref_dt")
+			ref_dn = frappe.form_dict.get("ref_dn")
 
-			response = RazorpayOrder.initiate(amount, currency, meta_data)
+			response = RazorpayOrder.initiate(
+				amount, currency, meta_data, ref_dt=ref_dt, ref_dn=ref_dn
+			)
 
 		elif self.endpoint == Endpoints.FAILURE_HANDLER:
 			order_id = frappe.form_dict["order_id"]

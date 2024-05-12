@@ -18,6 +18,10 @@
   "customer_email",
   "method",
   "contact",
+  "section_break_lsxh",
+  "ref_dt",
+  "column_break_dggw",
+  "ref_dn",
   "meta_section",
   "meta_data"
  ],
@@ -122,11 +126,33 @@
    "fieldtype": "Data",
    "label": "Contact",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_lsxh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ref_dt",
+   "fieldtype": "Link",
+   "label": "Reference DocType",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_dggw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ref_dn",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference DocName",
+   "options": "ref_dt",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-12 14:44:00.993266",
+ "modified": "2024-05-12 14:45:55.223780",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Order",
