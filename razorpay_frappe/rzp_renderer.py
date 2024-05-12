@@ -70,7 +70,7 @@ class RazorpayEndpointHandler:
 				order_id, payment_id, signature
 			)
 
-		frappe.response["data"] = response
+		frappe.response["message"] = response
 		return build_response("json")
 
 	def handle_webhook(self):

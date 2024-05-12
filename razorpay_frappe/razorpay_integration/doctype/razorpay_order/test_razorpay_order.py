@@ -73,6 +73,8 @@ class TestRazorpayOrder(FrappeAPITestCase):
 			{"amount": 200, "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 200)
+		self.assertIsNotNone(response.json.get("message").get("order_id"))
+		self.assertIsNotNone(response.json.get("message").get("key_id"))
 
 	def test_guest_checkout_enabled(self):
 		doc = frappe.get_doc("Razorpay Settings")
