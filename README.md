@@ -1,4 +1,8 @@
-### Razorpay Integration
+### Razorpay Integration for your custom Apps
+
+
+![Server Tests](https://github.com/BuildWithHussain/razorpay_frappe/actions/workflows/ci.yml/badge.svg)
+
 
 Razorpay Integration for Frappe
 
