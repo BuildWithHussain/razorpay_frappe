@@ -1,0 +1,87 @@
+<!-- MOVE THIS TO YOUR CUSTOM APP's `www` directory -->
+<!-- open "/checkout" on your site, and see the magic! -->
+
+
+{% extends "templates/web.html" %}
+
+{% block content %}
+<div class="container">
+	<h3>Checkout with Razorpay</h3>
+
+	<p>This is a sample checkout for razorpay_frappe app</p>
+
+	<button id="pay-button" class="btn btn-primary btn-md">Pay ₹200</button>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+	const payBtn = document.getElementById("pay-button")
+	const orderDetails = {
+		amount: 200,
+		currency: "INR",
+		meta_data: {
+			"purchase_for": "fake-apple-watch"
+		}
+	}
+
+	async function initiateOrder() {
+		const { order_id: orderId, key_id: keyId } = await post("/razorpay-api/initiate-order", orderDetails);
+		openRazorpayCheckout(orderId, keyId);
+	}
+
+	function openRazorpayCheckout(orderId, keyId) {
+		const options = {
+			key: keyId,
+			name: 'Razorpay Frappe',
+			description: 'Sample checkout with your money',
+			order_id: orderId,
+			handler: handlePaymentSuccess,
+			theme: {
+				color: '#1e1e1e',
+			},
+		}
+
+		const rzp = new Razorpay(options)
+		rzp.on('payment.failed', handlePaymentFailed)
+		rzp.open()
+	}
+
+	function handlePaymentSuccess(response) {
+		const data = {
+			order_id: response.razorpay_order_id,
+			payment_id: response.razorpay_payment_id,
+			signature: response.razorpay_signature,
+		}
+
+		alert("Payment Successful!")
+
+		post("/razorpay-api/success-handler", data)
+	}
+
+	function handlePaymentFailed(response) {
+		alert("Payment Failed!")
+		post("/razorpay-api/failure-handler", {
+			order_id: response.error.metadata.order_id,
+		})
+	}
+
+	payBtn.addEventListener("click", initiateOrder);
+
+
+	async function post(url, postData) {
+		const response = await fetch(url, {
+			method: "POST",
+			body: JSON.stringify(postData),
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+			}
+		})
+		const { data } = await response.json()
+		return data;
+	}
+</script>
+{% endblock %}
