@@ -3,8 +3,9 @@
 
 ![Server Tests](https://github.com/BuildWithHussain/razorpay_frappe/actions/workflows/ci.yml/badge.svg)
 
+## Introduction
 
-Razorpay Integration for Frappe
+I never want to write Razorpay Integration in my custom app again!
 
 ### Installation
 
@@ -12,9 +13,41 @@ You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app razorpay_frappe
+bench get-app $URL_OF_THIS_REPO --branch main
+bench --site $SITE_NAME install-app razorpay_frappe
 ```
+
+## Usage
+
+Just install this app, put your credentials in `Razorpay Settings` (Single Doctype) and your payment backend should be ready to go!
+
+## Integrating in Custom App
+
+There is only 1 master doctype in this app: `Razorpay Order`
+
+This app brings in 3 API endpoints for handling this order:
+
+1. "/razorpay-api/initiate-order"
+
+2. "/razorpay-api/success-handler"
+
+3. "/razorpay-api/failure-handler"
+
+### Guest Checkout
+
+By default, guest checkout is enabled in the settings, which means these endpoints
+
+### Webhook Setup
+
+
+## Frontend Integration
+
+You can find two examples with this repo:
+
+1. Portal Page with VanillaJS ([source](./examples/checkout.html))
+2. FrappeUI Page with Vue Headless component ([source](./examples/FrappeUICheckout.vue))
+
+The nice thing about the second example is that you can just copy the `RazorpayHeadlessCheckout` ([source](./examples/RazorpayHeadlessCheckout.vue)) component to your FrappeUI based frontend and it will just work!
 
 ### Contributing
 
