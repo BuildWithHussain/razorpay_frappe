@@ -4,7 +4,11 @@
 import frappe
 from frappe.model.document import Document
 
-from razorpay_frappe.utils import get_in_razorpay_money, get_razorpay_client
+from razorpay_frappe.utils import (
+	convert_from_razorpay_money,
+	get_in_razorpay_money,
+	get_razorpay_client,
+)
 
 
 class RazorpayOrder(Document):
@@ -87,11 +91,21 @@ class RazorpayOrder(Document):
 				}
 			)
 
-		order = frappe.get_doc("Razorpay Order", {"order_id": order_id})
+		order: RazorpayOrder = frappe.get_doc(
+			"Razorpay Order", {"order_id": order_id}
+		)
 		order.status = "Paid"
 		order.payment_id = payment_id
-
+		order.set_payment_details()
 		order.save(ignore_permissions=True)
+
+	def set_payment_details(self):
+		client = get_razorpay_client()
+		payment = client.payment.fetch(self.payment_id)
+		self.fee = convert_from_razorpay_money(payment.get("fee", 0))
+		self.tax = convert_from_razorpay_money(payment.get("tax", 0))
+		self.method = payment.get("method")
+		self.contact = payment.get("contact")
 
 	@frappe.whitelist()
 	def refund(self):
@@ -125,13 +139,13 @@ class RazorpayOrder(Document):
 			if payments[0]["status"] == "captured" and self.status != "Paid":
 				self.status = "Paid"
 				self.payment_id = payments[0]["id"]
-				self.save()
 			elif payments[0]["status"] == "refunded":
 				self.status = "Refunded"
-				self.save()
 		elif order["status"] == "created" and self.status != "Pending":
 			self.status = "Pending"
-			self.save()
+
+		self.set_payment_details()
+		self.save()
 
 	@property
 	def is_paid(self):
