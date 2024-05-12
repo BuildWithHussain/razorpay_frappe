@@ -100,6 +100,9 @@ class RazorpayOrder(Document):
 		order.save(ignore_permissions=True)
 
 	def set_payment_details(self):
+		if not self.payment_id:
+			return
+
 		client = get_razorpay_client()
 		payment = client.payment.fetch(self.payment_id)
 		self.fee = convert_from_razorpay_money(payment.get("fee", 0))
