@@ -28,7 +28,7 @@ def get_in_razorpay_money(amount: int) -> int:
 
 
 def convert_from_razorpay_money(amount: int) -> int:
-	return amount // 100
+	return amount / 100
 
 
 def verify_webhook_signature(payload):
