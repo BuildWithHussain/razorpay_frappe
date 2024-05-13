@@ -49,13 +49,13 @@ The nice thing about the second example is that you can just copy the `RazorpayH
 
 This app brings in the below API endpoints that are used in the above examples:
 
-1. "/razorpay-api/initiate-order": creating a new order
+1. **/razorpay-api/initiate-order** creating a new order
 
-2. "/razorpay-api/success-handler": handle payment success
+2. **/razorpay-api/success-handler**: handle payment success
 
-3. "/razorpay-api/failure-handler": handle payment failed
+3. **/razorpay-api/failure-handler**: handle payment failed
 
-4. "/razorpay-api/webhook-handler": handle webhooks from Razorpay
+4. **/razorpay-api/webhook-handler**: handle webhooks from Razorpay
 
 You can checkout `rzp_renderer.py` file to see how these work.
 
