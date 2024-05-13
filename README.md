@@ -8,7 +8,7 @@ I have built a Razorpay Integration from scratch 4 times till now (for Frappe Cl
 
 Let me show you the process of leveraging this app in your custom app or even in the customization layer (using server scripts).
 
-### 1. Installation
+## 1. Installation
 
 You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
