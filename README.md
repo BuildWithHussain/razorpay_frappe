@@ -6,7 +6,7 @@
 
 I have built a Razorpay Integration from scratch 4 times till now (for Frappe Cloud, e-book Store series, Printrove Integration and FOSS United Platform). I *don't want to write Razorpay Integration from scratch* ever again!
 
-Let me show you the process of leveraging this app in your custom app or even in the customization layer (use server scripts).
+Let me show you the process of leveraging this app in your custom app or even in the customization layer (using server scripts).
 
 ### 1. Installation
 
