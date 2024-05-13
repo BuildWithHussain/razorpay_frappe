@@ -1,0 +1,37 @@
+{
+ "based_on": "creation",
+ "chart_name": "Order per day",
+ "chart_type": "Count",
+ "color": "#29CD42",
+ "creation": "2024-05-13 13:50:14.755502",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "document_type": "Razorpay Order",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[[\"Razorpay Order\",\"status\",\"=\",\"Paid\",false]]",
+ "group_by_type": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "last_synced_on": "2024-05-13 13:51:03.023853",
+ "modified": "2024-05-13 13:51:18.562968",
+ "modified_by": "buildwithhussain@gmail.com",
+ "module": "Razorpay Integration",
+ "name": "Order per day",
+ "number_of_groups": 0,
+ "owner": "buildwithhussain@gmail.com",
+ "parent_document_type": "",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ],
+ "source": "",
+ "time_interval": "Daily",
+ "timeseries": 1,
+ "timespan": "Last Month",
+ "type": "Bar",
+ "use_report_chart": 0,
+ "value_based_on": "",
+ "y_axis": []
+}

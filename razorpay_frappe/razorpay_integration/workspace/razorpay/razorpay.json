@@ -1,0 +1,51 @@
+{
+ "charts": [
+  {
+   "chart_name": "Order per day",
+   "label": "Order per day"
+  }
+ ],
+ "content": "[{\"id\":\"YqD9BtpbEk\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Razorpay</span>\",\"col\":12}},{\"id\":\"3JeAwM-hfS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Settings\",\"col\":3}},{\"id\":\"nyUMj9xJ0C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"3BpR0_td7u\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Order per day\",\"col\":12}}]",
+ "creation": "2024-05-13 13:47:05.049702",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "expenses",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Razorpay",
+ "links": [],
+ "modified": "2024-05-13 13:51:08.196632",
+ "modified_by": "buildwithhussain@gmail.com",
+ "module": "Razorpay Integration",
+ "name": "Razorpay",
+ "number_cards": [],
+ "owner": "buildwithhussain@gmail.com",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Open Settings",
+   "link_to": "Razorpay Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Paid",
+   "label": "Orders",
+   "link_to": "Razorpay Order",
+   "stats_filter": "[[\"Razorpay Order\",\"status\",\"=\",\"Paid\",false]]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Razorpay"
+}
