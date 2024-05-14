@@ -33,6 +33,7 @@ class RazorpayOrder(Document):
 		payment_id: DF.Data | None
 		ref_dn: DF.DynamicLink | None
 		ref_dt: DF.Link | None
+		refund_id: DF.Data | None
 		status: DF.Literal[
 			"Pending", "Failed", "Paid", "Refund in Progress", "Refunded"
 		]

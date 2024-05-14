@@ -8,6 +8,7 @@ from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order 
 	RazorpayOrder,
 )
 from razorpay_frappe.rzp_renderer import Endpoints, RazorpayEndpointHandler
+from razorpay_frappe.utils import RazorpayWebhookEvents
 
 
 class TestRazorpayOrder(FrappeAPITestCase):
@@ -105,11 +106,28 @@ class TestRazorpayOrder(FrappeAPITestCase):
 		)
 		self.assertEqual(status, "Paid")
 
+	def test_webhook_handler_refund_processed(self):
+		order_id = RazorpayOrder.initiate(200).get("order_id")
+
+		# webhook received
+		webhook_payload = get_test_webhook_payload(order_id, "refund.processed")
+
+		RazorpayEndpointHandler(
+			"razorpay-api/webhook-handler"
+		).create_webhook_log(webhook_payload)
+
+		# order status is paid
+		status, refund_id = frappe.db.get_value(
+			"Razorpay Order", {"order_id": order_id}, ["status", "refund_id"]
+		)
+		self.assertEqual(status, "Refunded")
+		self.assertIsNotNone(refund_id)
+
 
 def get_test_webhook_payload(
 	order_id: str, event: str = "payment.captured"
 ) -> dict:
-	payload_json = """
+	CAPTURED_PAYLOAD_JSON = """
 	{
 	"account_id": "acc_7HIbgUNYLcDKI9",
 	"contains": [
@@ -117,7 +135,7 @@ def get_test_webhook_payload(
 	],
 	"created_at": 1715397833,
 	"entity": "event",
-	"event": "<EVENT>",
+	"event": "payment.captured",
 	"payload": {
 		"payment": {
 		"entity": {
@@ -166,7 +184,90 @@ def get_test_webhook_payload(
 	}
 	"""
 
+	REFUND_PAYLOAD_JSON = """
+{
+  "account_id": "acc_7HIbgUNYLcDKI9",
+  "cmd": "fossunited.handlers.handle_razorpay_webhook",
+  "contains": [
+    "refund",
+    "payment"
+  ],
+  "created_at": 1715603457,
+  "entity": "event",
+  "event": "refund.processed",
+  "payload": {
+    "payment": {
+      "entity": {
+        "acquirer_data": {
+          "rrn": "412668490230"
+        },
+        "amount": 15000,
+        "amount_refunded": 15000,
+        "amount_transferred": 0,
+        "bank": null,
+        "base_amount": 15000,
+        "captured": true,
+        "card_id": null,
+        "contact": "+9193435445861",
+        "created_at": 1714912499,
+        "currency": "INR",
+        "description": "QRv2 Payment",
+        "email": "sffnius006@gmail.com",
+        "entity": "payment",
+        "error_code": null,
+        "error_description": null,
+        "error_reason": null,
+        "error_source": null,
+        "error_step": null,
+        "fee": 354,
+        "id": "pay_O6oXSQImWvcBku",
+        "international": false,
+        "invoice_id": null,
+        "method": "upi",
+        "notes": {
+          "ticket_id": "c2f48b5ad2"
+        },
+        "order_id": "<ORDER-ID>",
+        "refund_status": "full",
+        "status": "refunded",
+        "tax": 54,
+        "upi": {
+          "payer_account_type": "bank_account",
+          "vpa": "934861@ybl"
+        },
+        "vpa": "95861@ybl",
+        "wallet": null
+      }
+    },
+    "refund": {
+      "entity": {
+        "acquirer_data": {
+          "rrn": "412668490230"
+        },
+        "amount": 15000,
+        "batch_id": null,
+        "created_at": 1715603454,
+        "currency": "INR",
+        "entity": "refund",
+        "id": "rfnd_O9yk7Rb3AHQGiM",
+        "notes": {
+          "comment": ""
+        },
+        "payment_id": "pay_O6oXSQImWvcBku",
+        "receipt": null,
+        "speed_processed": "normal",
+        "speed_requested": "normal",
+        "status": "processed"
+      }
+    }
+  }
+}
+	"""
+
+	payload_json = CAPTURED_PAYLOAD_JSON
+	if event == RazorpayWebhookEvents.RefundProcessed:
+		payload_json = REFUND_PAYLOAD_JSON
+
 	payload_json = payload_json.replace("<ORDER-ID>", order_id)
-	payload_json = payload_json.replace("<EVENT>", event)
 
 	return frappe.parse_json(payload_json)

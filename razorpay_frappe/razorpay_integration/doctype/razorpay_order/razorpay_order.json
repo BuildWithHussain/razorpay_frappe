@@ -18,6 +18,8 @@
   "customer_email",
   "method",
   "contact",
+  "refund_details_section",
+  "refund_id",
   "section_break_lsxh",
   "ref_dt",
   "column_break_dggw",
@@ -148,11 +150,22 @@
    "label": "Reference DocName",
    "options": "ref_dt",
    "read_only": 1
+  },
+  {
+   "fieldname": "refund_details_section",
+   "fieldtype": "Section Break",
+   "label": "Refund Details"
+  },
+  {
+   "fieldname": "refund_id",
+   "fieldtype": "Data",
+   "label": "Refund ID",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-12 14:45:55.223780",
+ "modified": "2024-05-14 20:18:50.588855",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Order",
