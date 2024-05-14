@@ -1,8 +1,14 @@
 import os
+from enum import StrEnum
 
 import frappe
 import razorpay
 from frappe.utils.password import get_decrypted_password
+
+
+class RazorpayWebhookEvents(StrEnum):
+	PaymentCaptured = "payment.captured"
+	RefundProcessed = "refund.processed"
 
 
 def get_razorpay_client():

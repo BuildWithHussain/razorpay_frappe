@@ -5,6 +5,7 @@ import frappe
 from frappe.model.document import Document
 
 from razorpay_frappe.utils import (
+	RazorpayWebhookEvents,
 	convert_from_razorpay_money,
 	get_in_razorpay_money,
 	get_razorpay_client,
@@ -107,19 +108,24 @@ class RazorpayOrder(Document):
 		order.set_payment_details()
 		order.save(ignore_permissions=True)
 
-	def set_payment_details(self):
+	def set_payment_details(self, payment_entity: dict | None = None):
 		if frappe.flags.in_test:
 			return
 
-		if not self.payment_id:
+		if not self.payment_id and payment_entity is None:
+			# not provided and can't fetch without id
 			return
 
-		client = get_razorpay_client()
-		payment = client.payment.fetch(self.payment_id)
-		self.fee = convert_from_razorpay_money(payment.get("fee", 0))
-		self.tax = convert_from_razorpay_money(payment.get("tax", 0))
-		self.method = payment.get("method")
-		self.contact = payment.get("contact")
+		if payment_entity is None:
+			client = get_razorpay_client()
+			payment_entity = client.payment.fetch(self.payment_id)
+
+		self.payment_id = payment_entity.get("id")
+		self.fee = convert_from_razorpay_money(payment_entity.get("fee", 0))
+		self.tax = convert_from_razorpay_money(payment_entity.get("tax", 0))
+		self.method = payment_entity.get("method")
+		self.contact = payment_entity.get("contact")
+		self.customer_email = payment_entity.get("email")
 
 	@frappe.whitelist()
 	def refund(self):
@@ -161,6 +167,32 @@ class RazorpayOrder(Document):
 		self.set_payment_details()
 		self.save()
 
+	def handle_webhook_event(self, event: str, webhook_payload: dict):
+		payment_entity = webhook_payload["payload"]["payment"]["entity"]
+
+		if event == RazorpayWebhookEvents.PaymentCaptured and not self.is_paid:
+			self.mark_as_paid(payment_entity)
+		elif (
+			event == RazorpayWebhookEvents.RefundProcessed
+			and not self.is_refunded
+		):
+			refund_entity = webhook_payload["payload"]["refund"]["entity"]
+			self.mark_as_refunded(refund_entity)
+
+	def mark_as_paid(self, payment_entity: dict):
+		self.status = "Paid"
+		self.set_payment_details(payment_entity)
+		self.save()
+
+	def mark_as_refunded(self, refund_entity: dict):
+		self.status = "Refunded"
+		self.refund_id = refund_entity["id"]
+		self.save()
+
 	@property
 	def is_paid(self):
 		return self.status == "Paid"
+
+	@property
+	def is_refunded(self):
+		return self.status == "Refunded"
