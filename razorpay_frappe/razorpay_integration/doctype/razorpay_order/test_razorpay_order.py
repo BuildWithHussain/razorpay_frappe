@@ -97,7 +97,7 @@ class TestRazorpayOrder(FrappeAPITestCase):
 
 		RazorpayEndpointHandler(
 			"razorpay-api/webhook-handler"
-		).process_webhook_payload(webhook_payload)
+		).create_webhook_log(webhook_payload)
 
 		# order status is paid
 		status = frappe.db.get_value(

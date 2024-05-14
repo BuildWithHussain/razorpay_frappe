@@ -8,7 +8,6 @@ from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order 
 	RazorpayOrder,
 )
 from razorpay_frappe.utils import (
-	convert_from_razorpay_money,
 	verify_webhook_signature,
 )
 
@@ -82,16 +81,15 @@ class RazorpayEndpointHandler:
 		payload = frappe.request.get_data()
 
 		verify_webhook_signature(payload)
-		self.process_webhook_payload(form_dict)
+		self.create_webhook_log(form_dict)
 
-	def process_webhook_payload(self, payload: dict):
+	def create_webhook_log(self, payload: dict):
 		current_user = frappe.session.user
 		frappe.set_user("Administrator")
 
 		payment_entity = payload["payload"]["payment"]["entity"]
 		razorpay_order_id = payment_entity["order_id"]
 		razorpay_payment_id = payment_entity["id"]
-		customer_email = payment_entity["email"]
 		event = payload.get("event")
 
 		frappe.get_doc(
@@ -103,35 +101,6 @@ class RazorpayEndpointHandler:
 				"payload": frappe.as_json(payload, indent=2),
 			}
 		).insert().submit()
-
-		order_exists = frappe.db.exists(
-			"Razorpay Order", {"order_id": razorpay_order_id}
-		)
-
-		if not order_exists:
-			return
-
-		order_doc = frappe.get_doc(
-			"Razorpay Order", {"order_id": razorpay_order_id}
-		)
-
-		if event == "payment.captured" and order_doc.status != "Paid":
-			order_doc.status = "Paid"
-			order_doc.fee = convert_from_razorpay_money(
-				payment_entity.get("fee", 0)
-			)
-			order_doc.tax = convert_from_razorpay_money(
-				payment_entity.get("tax", 0)
-			)
-			order_doc.method = payment_entity.get("method")
-			order_doc.contact = payment_entity.get("contact")
-		elif event == "refund.processed" and not order_doc.status == "Refunded":
-			refund_entity = payload["payload"]["refund"]["entity"]
-			order_doc.status = "Refunded"
-			order_doc.refund_id = refund_entity["id"]
-
-		order_doc.customer_email = customer_email
-		order_doc.save()
 
 		frappe.set_user(current_user)
 
