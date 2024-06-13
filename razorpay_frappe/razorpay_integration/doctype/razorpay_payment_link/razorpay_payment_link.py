@@ -59,5 +59,7 @@ class RazorpayPaymentLink(Document):
 	def fetch_latest_status(self):
 		client = get_razorpay_client()
 		payment_link = client.payment_link.fetch(self.id)
-		self.status = frappe.unscrub(payment_link["status"])
-		self.save()
+		link_status = frappe.unscrub(payment_link["status"])
+		if link_status != self.status:
+			self.status = link_status
+			self.save()

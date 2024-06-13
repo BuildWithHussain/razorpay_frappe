@@ -8,9 +8,11 @@ app_license = "mit"
 
 export_python_type_annotations = True
 
-page_renderer = [
-	"razorpay_frappe.rzp_renderer.RazorpayEndpointHandler"
-]
+page_renderer = ["razorpay_frappe.rzp_renderer.RazorpayEndpointHandler"]
+
+scheduler_events = {
+	"hourly": ["razorpay_frappe.schedule_handlers.sync_payment_link_status"]
+}
 
 # Includes in <head>
 # ------------------
@@ -232,4 +234,3 @@ page_renderer = [
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
