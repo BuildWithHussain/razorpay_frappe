@@ -5,7 +5,7 @@
    "label": "Order per day"
   }
  ],
- "content": "[{\"id\":\"YqD9BtpbEk\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Razorpay</span>\",\"col\":12}},{\"id\":\"3JeAwM-hfS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Settings\",\"col\":3}},{\"id\":\"nyUMj9xJ0C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"3BpR0_td7u\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Order per day\",\"col\":12}}]",
+ "content": "[{\"id\":\"YqD9BtpbEk\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Razorpay</span>\",\"col\":12}},{\"id\":\"3JeAwM-hfS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Settings\",\"col\":3}},{\"id\":\"nyUMj9xJ0C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"QOR3LKJMYq\",\"type\":\"paragraph\",\"data\":{\"text\":\"Payment Links\",\"col\":12}},{\"id\":\"RirTSv1GO2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Razorpay Payment Link\",\"col\":3}},{\"id\":\"huQ4m9a8x-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Payment Link\",\"col\":3}},{\"id\":\"66VtUFWjti\",\"type\":\"paragraph\",\"data\":{\"text\":\"Orders\",\"col\":12}},{\"id\":\"3BpR0_td7u\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Order per day\",\"col\":12}}]",
  "creation": "2024-05-13 13:47:05.049702",
  "custom_blocks": [],
  "docstatus": 0,
@@ -18,8 +18,8 @@
  "is_hidden": 0,
  "label": "Razorpay",
  "links": [],
- "modified": "2024-05-13 13:51:08.196632",
- "modified_by": "buildwithhussain@gmail.com",
+ "modified": "2024-06-13 23:40:44.554352",
+ "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay",
  "number_cards": [],
@@ -30,6 +30,23 @@
  "roles": [],
  "sequence_id": 1.0,
  "shortcuts": [
+  {
+   "color": "Green",
+   "doc_view": "New",
+   "label": "Create Payment Link",
+   "link_to": "Razorpay Payment Link",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Created",
+   "label": "Razorpay Payment Link",
+   "link_to": "Razorpay Payment Link",
+   "stats_filter": "[[\"Razorpay Payment Link\",\"status\",\"=\",\"Created\",false]]",
+   "type": "DocType"
+  },
   {
    "color": "Grey",
    "doc_view": "List",
