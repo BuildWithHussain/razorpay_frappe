@@ -4,14 +4,7 @@
 import frappe
 from frappe.model.document import Document
 
-from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order import (
-	RazorpayOrder,
-)
-from razorpay_frappe.utils import (
-	RazorpayWebhookEvents,
-)
-
-SUPPORTED_WEBHOOK_EVENTS = set(RazorpayWebhookEvents)
+from razorpay_frappe.webhook_processor import WebhookProcessor
 
 
 class RazorpayWebhookLog(Document):
@@ -25,24 +18,10 @@ class RazorpayWebhookLog(Document):
 
 		amended_from: DF.Link | None
 		event: DF.Data | None
-		order_id: DF.Data | None
 		payload: DF.Code | None
-		payment_id: DF.Data | None
 	# end: auto-generated types
 
 	def on_submit(self):
-		order_exists = frappe.db.exists(
-			"Razorpay Order", {"order_id": self.order_id}
-		)
-
-		if not order_exists:
-			return
-
-		if self.event not in SUPPORTED_WEBHOOK_EVENTS:
-			return
-
-		order_doc: RazorpayOrder = frappe.get_doc(
-			"Razorpay Order", {"order_id": self.order_id}
-		)
 		payload = frappe.parse_json(self.payload)
-		order_doc.handle_webhook_event(self.event, payload)
+		processor = WebhookProcessor(self.event, payload)
+		processor.process()

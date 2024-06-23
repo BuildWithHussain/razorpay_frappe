@@ -87,17 +87,11 @@ class RazorpayEndpointHandler:
 		current_user = frappe.session.user
 		frappe.set_user("Administrator")
 
-		payment_entity = payload["payload"]["payment"]["entity"]
-		razorpay_order_id = payment_entity["order_id"]
-		razorpay_payment_id = payment_entity["id"]
 		event = payload.get("event")
-
 		frappe.get_doc(
 			{
 				"doctype": "Razorpay Webhook Log",
 				"event": event,
-				"order_id": razorpay_order_id,
-				"payment_id": razorpay_payment_id,
 				"payload": frappe.as_json(payload, indent=2),
 			}
 		).insert().submit()

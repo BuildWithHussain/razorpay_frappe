@@ -6,9 +6,21 @@ import razorpay
 from frappe.utils.password import get_decrypted_password
 
 
-class RazorpayWebhookEvents(StrEnum):
+class RazorpayPaymentWebhookEvents(StrEnum):
 	PaymentCaptured = "payment.captured"
 	RefundProcessed = "refund.processed"
+
+
+class RazorpaySubscriptionWebhookEvents(StrEnum):
+	SubscriptionActivated = "subscription.activated"
+	SubscriptionCharged = "subscription.charged"
+	SubscriptionCompleted = "subscription.completed"
+	SubscriptionUpdated = "subscription.updated"
+	SubscriptionPending = "subscription.pending"
+	SubscriptionHalted = "subscription.halted"
+	SubscriptionCancelled = "subscription.cancelled"
+	SubscriptionPaused = "subscription.paused"
+	SubscriptionResumed = "subscription.resumed"
 
 
 def get_razorpay_client():

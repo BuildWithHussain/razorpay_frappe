@@ -5,7 +5,9 @@ import frappe
 from frappe.model.document import Document
 
 from razorpay_frappe.utils import (
-	RazorpayWebhookEvents,
+	RazorpayPaymentWebhookEvents as RazorpayWebhookEvents,
+)
+from razorpay_frappe.utils import (
 	convert_from_razorpay_money,
 	get_in_razorpay_money,
 	get_razorpay_client,
@@ -169,7 +171,7 @@ class RazorpayOrder(Document):
 		self.save()
 
 	def handle_webhook_event(self, event: str, webhook_payload: dict):
-		payment_entity = webhook_payload["payload"]["payment"]["entity"]
+		payment_entity = webhook_payload["payment"]["entity"]
 
 		if event == RazorpayWebhookEvents.PaymentCaptured and not self.is_paid:
 			self.mark_as_paid(payment_entity)
@@ -177,7 +179,7 @@ class RazorpayOrder(Document):
 			event == RazorpayWebhookEvents.RefundProcessed
 			and not self.is_refunded
 		):
-			refund_entity = webhook_payload["payload"]["refund"]["entity"]
+			refund_entity = webhook_payload["refund"]["entity"]
 			self.mark_as_refunded(refund_entity)
 
 	def mark_as_paid(self, payment_entity: dict):

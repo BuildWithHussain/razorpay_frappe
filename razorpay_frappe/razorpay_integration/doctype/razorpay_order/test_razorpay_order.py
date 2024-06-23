@@ -8,7 +8,9 @@ from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order 
 	RazorpayOrder,
 )
 from razorpay_frappe.rzp_renderer import Endpoints, RazorpayEndpointHandler
-from razorpay_frappe.utils import RazorpayWebhookEvents
+from razorpay_frappe.utils import (
+	RazorpayPaymentWebhookEvents as RazorpayWebhookEvents,
+)
 
 
 class TestRazorpayOrder(FrappeAPITestCase):
