@@ -21,4 +21,13 @@ class RazorpayNoteItem(Document):
 		value: DF.Data
 	# end: auto-generated types
 
-	pass
+	@staticmethod
+	def get_as_dict(notes: list[dict]) -> dict:
+		notes_dict = {}
+		if not notes:
+			return notes_dict
+
+		for note in notes:
+			notes_dict[note.key] = note.value
+
+		return notes_dict

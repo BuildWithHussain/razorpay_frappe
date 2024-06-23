@@ -112,7 +112,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-23 13:11:21.302506",
+ "modified": "2024-06-23 13:26:01.978796",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Plan",
@@ -133,6 +133,7 @@
   }
  ],
  "quick_entry": 1,
+ "search_fields": "period",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",

@@ -4,6 +4,9 @@
 import frappe
 from frappe.model.document import Document
 
+from razorpay_frappe.razorpay_integration.doctype.razorpay_note_item.razorpay_note_item import (
+	RazorpayNoteItem,
+)
 from razorpay_frappe.utils import get_in_razorpay_money, get_razorpay_client
 
 
@@ -50,16 +53,6 @@ class RazorpayPlan(Document):
 					"currency": self.currency,
 					"description": self.item_description,
 				},
-				"notes": self.get_notes_dict(),
+				"notes": RazorpayNoteItem.get_as_dict(self.notes),
 			}
 		)
-
-	def get_notes_dict(self):
-		notes_dict = {}
-		if not self.notes:
-			return notes_dict
-
-		for note in self.notes:
-			notes_dict[note.key] = note.value
-
-		return notes_dict
