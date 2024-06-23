@@ -1,10 +1,15 @@
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 import frappe
 
-from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order import (
-	RazorpayOrder,
-)
+if TYPE_CHECKING:
+	from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order import (
+		RazorpayOrder,
+	)
+	from razorpay_frappe.razorpay_integration.doctype.razorpay_subscription.razorpay_subscription import (
+		RazorpaySubscription,
+	)
 
 
 class RazorpayPaymentWebhookEvents(StrEnum):
@@ -13,6 +18,7 @@ class RazorpayPaymentWebhookEvents(StrEnum):
 
 
 class RazorpaySubscriptionWebhookEvents(StrEnum):
+	SubscriptionAuthenticated = "subscription.authenticated"
 	SubscriptionActivated = "subscription.activated"
 	SubscriptionCharged = "subscription.charged"
 	SubscriptionCompleted = "subscription.completed"
@@ -55,14 +61,18 @@ class WebhookProcessor:
 		return self.event in SUPPORTED_WEBHOOK_EVENTS
 
 	def process_subscription_event(self):
-		pass
+		subscription_id = self.get_subscription_id()
+		subscription_doc: "RazorpaySubscription" = frappe.get_doc(
+			"Razorpay Subscription", subscription_id
+		)
+		subscription_doc.handle_webhook_event(self.event, self.payload)
 
 	@property
 	def is_subscription_event(self) -> bool:
 		return self.event in set(RazorpaySubscriptionWebhookEvents)
 
 	def process_standalone_order(self):
-		order_doc: RazorpayOrder = frappe.get_doc(
+		order_doc: "RazorpayOrder" = frappe.get_doc(
 			"Razorpay Order", {"order_id": self.get_payment_order_id()}
 		)
 		order_doc.handle_webhook_event(self.event, self.payload)
@@ -72,6 +82,10 @@ class WebhookProcessor:
 		order_id = self.get_payment_order_id()
 		return frappe.db.exists("Razorpay Order", {"order_id": order_id})
 
-	def get_payment_order_id(self):
+	def get_payment_order_id(self) -> str:
 		if self.payload.get("payment"):
 			return self.payload.get("payment").get("entity", {}).get("order_id")
+
+	def get_subscription_id(self) -> str:
+		if self.payload.get("subscription"):
+			return self.payload.get("subscription").get("entity", {}).get("id")

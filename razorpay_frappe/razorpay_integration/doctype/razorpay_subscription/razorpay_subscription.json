@@ -1,0 +1,162 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:id",
+ "creation": "2024-06-23 13:13:59.005127",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "plan_id",
+  "id",
+  "customer_id",
+  "short_url",
+  "column_break_tblq",
+  "status",
+  "total_count",
+  "notify_customer_via_razorpay",
+  "ended_at",
+  "section_break_myrc",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "plan_id",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Plan",
+   "options": "Razorpay Plan",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "id",
+   "fieldtype": "Data",
+   "label": "ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_tblq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Number of billing cycles for which the customer will be charged.",
+   "fieldname": "total_count",
+   "fieldtype": "Int",
+   "label": "Total Count",
+   "non_negative": 1,
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "default": "1",
+   "description": "If checked, Razorpay will handle communications about subscription",
+   "fieldname": "notify_customer_via_razorpay",
+   "fieldtype": "Check",
+   "label": "Notify Customer via Razorpay?",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "section_break_myrc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Table",
+   "label": "Notes",
+   "options": "Razorpay Note Item",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "customer_id",
+   "fieldtype": "Data",
+   "label": "Customer ID",
+   "read_only": 1
+  },
+  {
+   "documentation_url": "https://razorpay.com/docs/payments/subscriptions/states/",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Created\nAuthenticated\nActive\nPending\nHalted\nCancelled\nCompleted\nExpired",
+   "read_only": 1
+  },
+  {
+   "fieldname": "short_url",
+   "fieldtype": "Data",
+   "label": "Short URL",
+   "options": "URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ended_at",
+   "fieldtype": "Date",
+   "label": "Ended At",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "Razorpay Subscription Charge",
+   "link_fieldname": "subscription"
+  }
+ ],
+ "modified": "2024-06-23 21:48:47.469721",
+ "modified_by": "Administrator",
+ "module": "Razorpay Integration",
+ "name": "Razorpay Subscription",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Cyan",
+   "title": "Created"
+  },
+  {
+   "color": "Green",
+   "title": "Active"
+  },
+  {
+   "color": "Yellow",
+   "title": "Pending"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  },
+  {
+   "color": "Gray",
+   "title": "Completed"
+  },
+  {
+   "color": "Red",
+   "title": "Expired"
+  },
+  {
+   "color": "Red",
+   "title": "Halted"
+  }
+ ],
+ "track_changes": 1
+}
