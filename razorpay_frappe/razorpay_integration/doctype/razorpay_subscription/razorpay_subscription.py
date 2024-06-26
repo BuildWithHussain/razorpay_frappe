@@ -108,6 +108,11 @@ class RazorpaySubscription(Document):
 				self.record_charge_for_subscription(payload)
 
 			self.save()
+		elif event == RazorpaySubscriptionWebhookEvents.SubscriptionCharged:
+			subscription_entity = payload["subscription"]["entity"]
+			self.status = frappe.unscrub(subscription_entity.get("status"))
+			self.record_charge_for_subscription(payload)
+			self.save()
 
 	def record_charge_for_subscription(self, webhook_payload: dict):
 		payment_entity = webhook_payload["payment"]["entity"]
@@ -125,5 +130,6 @@ class RazorpaySubscription(Document):
 				"method": payment_entity["method"],
 				"contact": payment_entity["contact"],
 				"customer_id": payment_entity.get("customer_id"),
+				"status": "Paid",
 			}
 		).save()

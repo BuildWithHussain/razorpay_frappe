@@ -102,6 +102,30 @@ class TestRazorpaySubscription(FrappeTestCase):
 				"order_id": "test_subscription_upfront_order_id",
 				"payment_id": "test_subscription_upfront_payment_id",
 				"invoice_id": "test_subscription_upfront_invoice_id",
+				"status": "Paid",
+			},
+		)
+		self.assertIsNotNone(charge_order)
+
+	def test_subscription_charged_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload("subscription.charged")
+
+		status = frappe.db.get_value(
+			"Razorpay Subscription",
+			self.test_subscription.name,
+			"status",
+		)
+		self.assertEqual(status, "Active")
+
+		charge_order = frappe.db.exists(
+			"Razorpay Order",
+			{
+				"subscription": self.test_subscription.name,
+				"type": "Subscription",
+				"order_id": "test_subscription_upfront_order_id",
+				"payment_id": "test_subscription_upfront_payment_id",
+				"invoice_id": "test_subscription_upfront_invoice_id",
+				"status": "Paid",
 			},
 		)
 		self.assertIsNotNone(charge_order)
@@ -346,13 +370,13 @@ SAMPLE_WEBHOOK_PAYLOADS = {
     },
     "payment": {
       "entity": {
-        "id": "pay_DEXFWroJ6LikKT",
+        "id": "test_subscription_upfront_payment_id",
         "entity": "payment",
         "amount": 100000,
         "currency": "INR",
         "status": "captured",
-        "order_id": "order_DEXFWXwO24pDxH",
-        "invoice_id": "inv_DEXFWVuM6rPqlK",
+        "order_id": "test_subscription_upfront_order_id",
+        "invoice_id": "test_subscription_upfront_invoice_id",
         "international": false,
         "method": "card",
         "amount_refunded": 0,
