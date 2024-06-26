@@ -46,6 +46,7 @@ class RazorpaySubscription(Document):
 			"Cancelled",
 			"Completed",
 			"Expired",
+			"Paused",
 		]
 		total_count: DF.Int
 	# end: auto-generated types
@@ -112,6 +113,18 @@ class RazorpaySubscription(Document):
 			subscription_entity = payload["subscription"]["entity"]
 			self.status = frappe.unscrub(subscription_entity.get("status"))
 			self.record_charge_for_subscription(payload)
+			self.save()
+		elif event == RazorpaySubscriptionWebhookEvents.SubscriptionHalted:
+			self.status = "Halted"
+			self.save()
+		elif event == RazorpaySubscriptionWebhookEvents.SubscriptionPaused:
+			self.status = "Paused"
+			self.save()
+		elif event == RazorpaySubscriptionWebhookEvents.SubscriptionResumed:
+			self.status = "Active"
+			self.save()
+		elif event == RazorpaySubscriptionWebhookEvents.SubscriptionPending:
+			self.status = "Pending"
 			self.save()
 
 	def record_charge_for_subscription(self, webhook_payload: dict):

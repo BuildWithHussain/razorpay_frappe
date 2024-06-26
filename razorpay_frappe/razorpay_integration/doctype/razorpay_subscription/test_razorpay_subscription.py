@@ -74,25 +74,13 @@ class TestRazorpaySubscription(FrappeTestCase):
 			"subscription.activated.no_upfront"
 		)
 
-		status = frappe.db.get_value(
-			"Razorpay Subscription",
-			self.test_subscription.name,
-			"status",
-		)
-
-		self.assertEqual(status, "Active")
+		self.assert_test_subscription_status_equals("Active")
 
 	def test_activated_with_upfront_charge_webhook(self):
 		self.trigger_webhook_handler_with_sample_payload(
 			"subscription.activated.with_upfront"
 		)
-
-		status = frappe.db.get_value(
-			"Razorpay Subscription",
-			self.test_subscription.name,
-			"status",
-		)
-		self.assertEqual(status, "Active")
+		self.assert_test_subscription_status_equals("Active")
 
 		charge_order = frappe.db.exists(
 			"Razorpay Order",
@@ -109,13 +97,7 @@ class TestRazorpaySubscription(FrappeTestCase):
 
 	def test_subscription_charged_webhook(self):
 		self.trigger_webhook_handler_with_sample_payload("subscription.charged")
-
-		status = frappe.db.get_value(
-			"Razorpay Subscription",
-			self.test_subscription.name,
-			"status",
-		)
-		self.assertEqual(status, "Active")
+		self.assert_test_subscription_status_equals("Active")
 
 		charge_order = frappe.db.exists(
 			"Razorpay Order",
@@ -129,6 +111,30 @@ class TestRazorpaySubscription(FrappeTestCase):
 			},
 		)
 		self.assertIsNotNone(charge_order)
+
+	def test_subscription_halted_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload("subscription.halted")
+		self.assert_test_subscription_status_equals("Halted")
+
+	def test_subscription_paused_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload("subscription.paused")
+		self.assert_test_subscription_status_equals("Paused")
+
+	def test_subscription_resumed_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload("subscription.resumed")
+		self.assert_test_subscription_status_equals("Active")
+
+	def test_subscription_pending_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload("subscription.pending")
+		self.assert_test_subscription_status_equals("Pending")
+
+	def assert_test_subscription_status_equals(self, expected_status: str):
+		status = frappe.db.get_value(
+			"Razorpay Subscription",
+			self.test_subscription.name,
+			"status",
+		)
+		self.assertEqual(status, expected_status)
 
 	def trigger_webhook_handler_with_sample_payload(self, event: str):
 		webhook_payload = process_payload_string(
@@ -519,7 +525,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_DEXpmJhEIZK4fe",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_BvrHngQ0xLNnNG",
         "customer_id": "cust_C0WlbKhp3aLA7W",
@@ -564,7 +570,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_DEX6xcJ1HSW4CR",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_BvrFKjSxauOH7N",
         "customer_id": "cust_C0WlbKhp3aLA7W",
@@ -609,7 +615,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_DEX6xcJ1HSW4CR",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_BvrFKjSxauOH7N",
         "customer_id": "cust_C0WlbKhp3aLA7W",
@@ -654,7 +660,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_FeQ9WWOjGUZMpG",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_FeMmuaVVa1HR0W",
         "customer_id": "cust_FeOEa4PPa0by07",
@@ -700,7 +706,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_FeQ9WWOjGUZMpG",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_FeMmuaVVa1HR0W",
         "customer_id": "cust_FeOEa4PPa0by07",
