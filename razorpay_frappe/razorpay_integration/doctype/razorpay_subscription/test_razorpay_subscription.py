@@ -122,9 +122,9 @@ class TestRazorpaySubscription(FrappeTestCase):
 			{
 				"subscription": self.test_subscription.name,
 				"type": "Subscription",
-				"order_id": "test_subscription_upfront_order_id",
-				"payment_id": "test_subscription_upfront_payment_id",
-				"invoice_id": "test_subscription_upfront_invoice_id",
+				"order_id": "test_subscription_charged_order_id",
+				"payment_id": "test_subscription_charged_payment_id",
+				"invoice_id": "test_subscription_charged_invoice_id",
 				"status": "Paid",
 			},
 		)
@@ -370,13 +370,13 @@ SAMPLE_WEBHOOK_PAYLOADS = {
     },
     "payment": {
       "entity": {
-        "id": "test_subscription_upfront_payment_id",
+        "id": "test_subscription_charged_payment_id",
         "entity": "payment",
         "amount": 100000,
         "currency": "INR",
         "status": "captured",
-        "order_id": "test_subscription_upfront_order_id",
-        "invoice_id": "test_subscription_upfront_invoice_id",
+        "order_id": "test_subscription_charged_order_id",
+        "invoice_id": "test_subscription_charged_invoice_id",
         "international": false,
         "method": "card",
         "amount_refunded": 0,
