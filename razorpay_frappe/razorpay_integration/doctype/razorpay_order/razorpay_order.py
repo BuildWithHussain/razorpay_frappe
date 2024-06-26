@@ -27,7 +27,9 @@ class RazorpayOrder(Document):
 		contact: DF.Data | None
 		currency: DF.Link | None
 		customer_email: DF.Data | None
+		customer_id: DF.Data | None
 		fee: DF.Currency
+		invoice_id: DF.Data | None
 		meta_data: DF.Code | None
 		method: DF.Data | None
 		name: DF.Int | None
@@ -39,7 +41,9 @@ class RazorpayOrder(Document):
 		status: DF.Literal[
 			"Pending", "Failed", "Paid", "Refund in Progress", "Refunded"
 		]
+		subscription: DF.Link | None
 		tax: DF.Currency
+		type: DF.Literal["Standalone", "Payment Link", "Subscription"]
 	# end: auto-generated types
 
 	@staticmethod

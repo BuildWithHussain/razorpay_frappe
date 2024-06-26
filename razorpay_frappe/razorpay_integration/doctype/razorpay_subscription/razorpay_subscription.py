@@ -8,7 +8,10 @@ from frappe.model.document import Document
 from razorpay_frappe.razorpay_integration.doctype.razorpay_note_item.razorpay_note_item import (
 	RazorpayNoteItem,
 )
-from razorpay_frappe.utils import get_razorpay_client
+from razorpay_frappe.utils import (
+	convert_from_razorpay_money,
+	get_razorpay_client,
+)
 from razorpay_frappe.webhook_processor import (
 	RazorpaySubscriptionWebhookEvents,
 )
@@ -97,3 +100,30 @@ class RazorpaySubscription(Document):
 			end_timestamp = payload["subscription"]["entity"]["ended_at"]
 			self.ended_at = datetime.utcfromtimestamp(end_timestamp)
 			self.save()
+		elif event == RazorpaySubscriptionWebhookEvents.SubscriptionActivated:
+			self.status = "Active"
+
+			# handle upfront charge (if applicable)
+			if payload["subscription"]["entity"].get("type") == 2:
+				self.record_charge_for_subscription(payload)
+
+			self.save()
+
+	def record_charge_for_subscription(self, webhook_payload: dict):
+		payment_entity = webhook_payload["payment"]["entity"]
+		frappe.get_doc(
+			{
+				"doctype": "Razorpay Order",
+				"type": "Subscription",
+				"order_id": payment_entity["order_id"],
+				"subscription": self.name,
+				"payment_id": payment_entity["id"],
+				"invoice_id": payment_entity["invoice_id"],
+				"fee": convert_from_razorpay_money(payment_entity["fee"]),
+				"tax": convert_from_razorpay_money(payment_entity["tax"]),
+				"customer_email": payment_entity["email"],
+				"method": payment_entity["method"],
+				"contact": payment_entity["contact"],
+				"customer_id": payment_entity.get("customer_id"),
+			}
+		).save()

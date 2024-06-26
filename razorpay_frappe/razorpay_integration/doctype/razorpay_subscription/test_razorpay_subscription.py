@@ -69,6 +69,43 @@ class TestRazorpaySubscription(FrappeTestCase):
 		self.assertEqual(status, "Completed")
 		self.assertEqual(str(ended_at), "2020-09-04")
 
+	def test_activated_no_upfront_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload(
+			"subscription.activated.no_upfront"
+		)
+
+		status = frappe.db.get_value(
+			"Razorpay Subscription",
+			self.test_subscription.name,
+			"status",
+		)
+
+		self.assertEqual(status, "Active")
+
+	def test_activated_with_upfront_charge_webhook(self):
+		self.trigger_webhook_handler_with_sample_payload(
+			"subscription.activated.with_upfront"
+		)
+
+		status = frappe.db.get_value(
+			"Razorpay Subscription",
+			self.test_subscription.name,
+			"status",
+		)
+		self.assertEqual(status, "Active")
+
+		charge_order = frappe.db.exists(
+			"Razorpay Order",
+			{
+				"subscription": self.test_subscription.name,
+				"type": "Subscription",
+				"order_id": "test_subscription_upfront_order_id",
+				"payment_id": "test_subscription_upfront_payment_id",
+				"invoice_id": "test_subscription_upfront_invoice_id",
+			},
+		)
+		self.assertIsNotNone(charge_order)
+
 	def trigger_webhook_handler_with_sample_payload(self, event: str):
 		webhook_payload = process_payload_string(
 			SAMPLE_WEBHOOK_PAYLOADS[event],
@@ -140,7 +177,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_DEX6xcJ1HSW4CR",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_BvrFKjSxauOH7N",
         "customer_id": "cust_C0WlbKhp3aLA7W",
@@ -185,7 +222,7 @@ SAMPLE_WEBHOOK_PAYLOADS = {
   "payload": {
     "subscription": {
       "entity": {
-        "id": "sub_DEX6xcJ1HSW4CR",
+        "id": "<SUBSCRIPTION-ID>",
         "entity": "subscription",
         "plan_id": "plan_BvrFKjSxauOH7N",
         "customer_id": "cust_C0WlbKhp3aLA7W",
@@ -218,13 +255,13 @@ SAMPLE_WEBHOOK_PAYLOADS = {
     },
     "payment": {
       "entity": {
-        "id": "pay_DEXFWroJ6LikKT",
+        "id": "test_subscription_upfront_payment_id",
         "entity": "payment",
         "amount": 100000,
         "currency": "INR",
         "status": "captured",
-        "order_id": "order_DEXFWXwO24pDxH",
-        "invoice_id": "inv_DEXFWVuM6rPqlK",
+        "order_id": "test_subscription_upfront_order_id",
+        "invoice_id": "test_subscription_upfront_invoice_id",
         "international": false,
         "method": "card",
         "amount_refunded": 0,

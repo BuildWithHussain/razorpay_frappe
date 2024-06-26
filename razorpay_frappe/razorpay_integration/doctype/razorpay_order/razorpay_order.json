@@ -8,8 +8,14 @@
   "status",
   "amount",
   "column_break_mntn",
+  "type",
   "order_id",
   "currency",
+  "subscription_details_section",
+  "subscription",
+  "customer_id",
+  "column_break_ubam",
+  "invoice_id",
   "payment_section",
   "payment_id",
   "fee",
@@ -162,11 +168,47 @@
    "fieldtype": "Data",
    "label": "Refund ID",
    "read_only": 1
+  },
+  {
+   "default": "Standalone",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Standalone\nPayment Link\nSubscription",
+   "read_only": 1
+  },
+  {
+   "fieldname": "subscription_details_section",
+   "fieldtype": "Section Break",
+   "label": "Subscription Details"
+  },
+  {
+   "fieldname": "invoice_id",
+   "fieldtype": "Data",
+   "label": "Invoice ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "subscription",
+   "fieldtype": "Link",
+   "label": "Subscription",
+   "options": "Razorpay Subscription",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ubam",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_id",
+   "fieldtype": "Data",
+   "label": "Customer ID",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-23 15:09:28.449571",
+ "modified": "2024-06-26 21:33:18.368146",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Order",
