@@ -5,7 +5,7 @@
    "label": "Order per day"
   }
  ],
- "content": "[{\"id\":\"YqD9BtpbEk\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Razorpay</span>\",\"col\":12}},{\"id\":\"3JeAwM-hfS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Settings\",\"col\":3}},{\"id\":\"nyUMj9xJ0C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"QOR3LKJMYq\",\"type\":\"paragraph\",\"data\":{\"text\":\"Payment Links\",\"col\":12}},{\"id\":\"RirTSv1GO2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Razorpay Payment Link\",\"col\":5}},{\"id\":\"huQ4m9a8x-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Payment Link\",\"col\":3}},{\"id\":\"66VtUFWjti\",\"type\":\"paragraph\",\"data\":{\"text\":\"Orders\",\"col\":12}},{\"id\":\"3BpR0_td7u\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Order per day\",\"col\":12}}]",
+ "content": "[{\"id\":\"YqD9BtpbEk\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Razorpay</span>\",\"col\":12}},{\"id\":\"3JeAwM-hfS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Settings\",\"col\":3}},{\"id\":\"nyUMj9xJ0C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"QOR3LKJMYq\",\"type\":\"paragraph\",\"data\":{\"text\":\"Payment Links\",\"col\":12}},{\"id\":\"RirTSv1GO2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Razorpay Payment Link\",\"col\":5}},{\"id\":\"huQ4m9a8x-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Payment Link\",\"col\":3}},{\"id\":\"66VtUFWjti\",\"type\":\"paragraph\",\"data\":{\"text\":\"Orders\",\"col\":12}},{\"id\":\"3BpR0_td7u\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Order per day\",\"col\":12}},{\"id\":\"-Viqwe2bIu\",\"type\":\"paragraph\",\"data\":{\"text\":\"Subscriptions\",\"col\":12}},{\"id\":\"B4-fOw9Spt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Plans\",\"col\":4}},{\"id\":\"GaY660EWhb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Subscriptions\",\"col\":4}}]",
  "creation": "2024-05-13 13:47:05.049702",
  "custom_blocks": [],
  "docstatus": 0,
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Razorpay",
  "links": [],
- "modified": "2024-06-13 23:41:25.566047",
+ "modified": "2024-06-27 14:28:41.853792",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay",
@@ -52,6 +52,24 @@
    "doc_view": "List",
    "label": "Open Settings",
    "link_to": "Razorpay Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Plans",
+   "link_to": "Razorpay Plan",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Active",
+   "label": "Subscriptions",
+   "link_to": "Razorpay Subscription",
+   "stats_filter": "[[\"Razorpay Subscription\",\"status\",\"=\",\"Active\",false]]",
    "type": "DocType"
   },
   {
