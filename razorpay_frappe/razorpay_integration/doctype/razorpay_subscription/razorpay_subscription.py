@@ -67,10 +67,25 @@ class RazorpaySubscription(Document):
 				"customer_notify": 1
 				if self.notify_customer_via_razorpay
 				else 0,
-				"total_count": self.total_count or 12,
+				"total_count": self.total_count,
 				"notes": RazorpayNoteItem.get_as_dict(self.notes),
 			}
 		)
+
+	@staticmethod
+	def new_from_form_dict():
+		plan_id = frappe.form_dict["plan_id"]
+		total_count = frappe.form_dict.get("total_count", 12)
+		customer_notify = frappe.form_dict.get("customer_notify", 1)
+		notes = frappe.form_dict.get("notes", [])
+
+		return frappe.get_doc(
+			doctype="Razorpay Subscription",
+			plan_id=plan_id,
+			total_count=total_count,
+			customer_notify=customer_notify,
+			notes=notes,
+		).insert(ignore_permissions=True)
 
 	@frappe.whitelist()
 	def fetch_latest_status(self):

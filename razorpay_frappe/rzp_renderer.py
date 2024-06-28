@@ -7,6 +7,9 @@ from werkzeug.wrappers import Response
 from razorpay_frappe.razorpay_integration.doctype.razorpay_order.razorpay_order import (
 	RazorpayOrder,
 )
+from razorpay_frappe.razorpay_integration.doctype.razorpay_subscription.razorpay_subscription import (
+	RazorpaySubscription,
+)
 from razorpay_frappe.utils import (
 	verify_webhook_signature,
 )
@@ -19,6 +22,7 @@ class Endpoints(StrEnum):
 	FAILURE_HANDLER = "failure-handler"
 	WEBHOOK_HANDLER = "webhook-handler"
 	INITIATE_ORDER = "initiate-order"
+	NEW_SUBSCRIPTION = "new-subscription"
 
 
 class RazorpayEndpointHandler:
@@ -72,6 +76,15 @@ class RazorpayEndpointHandler:
 			response = RazorpayOrder.handle_success(
 				order_id, payment_id, signature
 			)
+
+		elif self.endpoint == Endpoints.NEW_SUBSCRIPTION:
+			doc = RazorpaySubscription.new_from_form_dict()
+			response = {
+				"subscription_doc": doc,
+				"key_id": frappe.db.get_single_value(
+					"Razorpay Settings", "key_id"
+				),
+			}
 
 		frappe.response["message"] = response
 		return build_response("json")
