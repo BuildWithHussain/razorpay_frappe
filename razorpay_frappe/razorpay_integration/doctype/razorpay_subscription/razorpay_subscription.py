@@ -67,7 +67,7 @@ class RazorpaySubscription(Document):
 				"customer_notify": 1
 				if self.notify_customer_via_razorpay
 				else 0,
-				"total_count": self.total_count,
+				"total_count": self.total_count or 12,
 				"notes": RazorpayNoteItem.get_as_dict(self.notes),
 			}
 		)
