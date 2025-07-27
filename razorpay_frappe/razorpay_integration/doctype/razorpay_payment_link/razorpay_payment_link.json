@@ -6,6 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "description",
   "amount",
   "currency",
   "id",
@@ -123,11 +124,17 @@
    "fieldtype": "Date",
    "label": "Expire By",
    "set_only_once": 1
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-13 23:42:05.461607",
+ "modified": "2025-07-27 14:05:08.341449",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Payment Link",
@@ -148,6 +155,7 @@
   }
  ],
  "quick_entry": 1,
+ "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [

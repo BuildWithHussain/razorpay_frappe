@@ -23,12 +23,11 @@ class RazorpayPaymentLink(Document):
 		customer_contact: DF.Phone | None
 		customer_email: DF.Data | None
 		customer_name: DF.Data | None
+		description: DF.SmallText | None
 		expire_by: DF.Date | None
 		id: DF.Data | None
 		short_url: DF.Data | None
-		status: DF.Literal[
-			"Created", "Partially Paid", "Expired", "Cancelled", "Paid"
-		]
+		status: DF.Literal["Created", "Partially Paid", "Expired", "Cancelled", "Paid"]
 		type: DF.Literal["Standard", "UPI"]
 	# end: auto-generated types
 
@@ -44,6 +43,7 @@ class RazorpayPaymentLink(Document):
 		return client.payment_link.create(
 			{
 				"amount": get_in_razorpay_money(self.amount),
+				"description": self.description,
 				"currency": self.currency,
 				"customer": {
 					"name": self.customer_name,
