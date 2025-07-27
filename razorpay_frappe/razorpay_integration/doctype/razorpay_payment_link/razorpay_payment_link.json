@@ -129,12 +129,13 @@
    "allow_in_quick_entry": 1,
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Description"
+   "label": "Description",
+   "set_only_once": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-27 14:05:08.341449",
+ "modified": "2025-07-27 14:44:06.642423",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
  "name": "Razorpay Payment Link",
