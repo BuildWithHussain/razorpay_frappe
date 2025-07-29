@@ -169,10 +169,10 @@ class RazorpayOrder(Document):
 
 		if order["status"] == "paid":
 			frappe.errprint(payments)
-			if not self.payment_id or (payments[0]["status"] == "captured" and self.status != "Paid"):
+			if not self.payment_id or (payments[-1]["status"] == "captured" and self.status != "Paid"):
 				self.status = "Paid"
-				self.payment_id = payments[0]["id"]
-			elif payments[0]["status"] == "refunded":
+				self.payment_id = payments[-1]["id"]
+			elif payments[-1]["status"] == "refunded":
 				self.status = "Refunded"
 		elif order["status"] == "created" and self.status != "Pending":
 			self.status = "Pending"
