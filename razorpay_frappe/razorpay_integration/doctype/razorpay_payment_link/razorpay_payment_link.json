@@ -101,13 +101,13 @@
    "fieldname": "customer_name",
    "fieldtype": "Data",
    "label": "Customer Name",
-   "set_only_once": 1
+   "read_only": 1
   },
   {
    "fieldname": "customer_contact",
    "fieldtype": "Phone",
    "label": "Customer Contact",
-   "set_only_once": 1
+   "read_only": 1
   },
   {
    "fieldname": "column_break_nmes",
@@ -118,7 +118,7 @@
    "fieldtype": "Data",
    "label": "Customer Email",
    "options": "Email",
-   "set_only_once": 1
+   "read_only": 1
   },
   {
    "allow_in_quick_entry": 1,
@@ -142,7 +142,7 @@
    "link_fieldname": "ref_dn"
   }
  ],
- "modified": "2025-07-29 15:12:19.179276",
+ "modified": "2025-07-29 16:38:17.223811",
  "modified_by": "hussain@frappe.io",
  "module": "Razorpay Integration",
  "name": "Razorpay Payment Link",
