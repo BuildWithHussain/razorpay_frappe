@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils.data import get_timestamp
 
-from razorpay_frappe.utils import get_in_razorpay_money, get_razorpay_client
+from razorpay_frappe.utils import get_in_razorpay_money, get_razorpay_client, convert_from_razorpay_money
 
 
 class RazorpayPaymentLink(Document):
@@ -59,7 +59,39 @@ class RazorpayPaymentLink(Document):
 	def fetch_latest_status(self):
 		client = get_razorpay_client()
 		payment_link = client.payment_link.fetch(self.id)
+
+		if payment_link["status"] == "paid":
+			order_id = payment_link["order_id"]
+			payment_id = payment_link["payments"][0]["payment_id"]
+			self.create_or_update_order(order_id)
+			self.set_customer_details(payment_id)
+
 		link_status = frappe.unscrub(payment_link["status"])
 		if link_status != self.status:
 			self.status = link_status
 			self.save()
+
+	def create_or_update_order(self, order_id: str):
+		client = get_razorpay_client()
+		order_already_exists = frappe.db.exists("Razorpay Order", {"order_id": order_id})
+
+		if order_already_exists:
+			frappe.get_doc("Razorpay Order", {"order_id": order_id}).sync_status()
+		else:
+			razorpay_order = client.order.fetch(order_id)
+			order_doc = frappe.get_doc(doctype="Razorpay Order",
+				order_id=order_id,
+				amount=convert_from_razorpay_money(razorpay_order["amount"]),
+				currency=razorpay_order["currency"],
+				status="Pending",
+				ref_dt="Razorpay Payment Link",
+				ref_dn=self.name,
+			)
+			order_doc.insert(ignore_permissions=True)
+			order_doc.sync_status()
+
+	def set_customer_details(self, payment_id: str):
+		client = get_razorpay_client()
+		payment = client.payment.fetch(payment_id)
+		self.customer_email = payment["email"]
+		self.customer_contact = payment["contact"]

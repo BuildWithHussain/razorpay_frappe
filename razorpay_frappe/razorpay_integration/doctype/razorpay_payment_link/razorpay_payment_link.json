@@ -77,6 +77,7 @@
    "fieldname": "short_url",
    "fieldtype": "Data",
    "label": "Short URL",
+   "no_copy": 1,
    "options": "URL",
    "read_only": 1
   },
@@ -86,6 +87,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Status",
+   "no_copy": 1,
    "options": "Created\nPartially Paid\nExpired\nCancelled\nPaid",
    "read_only": 1,
    "sort_options": 1
@@ -134,9 +136,14 @@
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-07-27 14:44:06.642423",
- "modified_by": "Administrator",
+ "links": [
+  {
+   "link_doctype": "Razorpay Order",
+   "link_fieldname": "ref_dn"
+  }
+ ],
+ "modified": "2025-07-29 15:12:19.179276",
+ "modified_by": "hussain@frappe.io",
  "module": "Razorpay Integration",
  "name": "Razorpay Payment Link",
  "naming_rule": "By fieldname",

@@ -72,10 +72,14 @@ class WebhookProcessor:
 		return self.event in set(RazorpaySubscriptionWebhookEvents)
 
 	def process_standalone_order(self):
-		order_doc: "RazorpayOrder" = frappe.get_doc(
-			"Razorpay Order", {"order_id": self.get_payment_order_id()}
-		)
-		order_doc.handle_webhook_event(self.event, self.payload)
+		try:
+			order_doc: "RazorpayOrder" = frappe.get_doc(
+				"Razorpay Order", {"order_id": self.get_payment_order_id()}
+			)
+			order_doc.handle_webhook_event(self.event, self.payload)
+		except frappe.DoesNotExistError:
+			frappe.log_error("Razorpay Order not found!")
+
 
 	@property
 	def is_standalone_order(self) -> bool:

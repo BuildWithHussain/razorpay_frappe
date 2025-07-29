@@ -20,10 +20,12 @@
   "payment_id",
   "fee",
   "tax",
+  "base_amount",
   "column_break_sqkm",
   "customer_email",
   "method",
   "contact",
+  "base_currency",
   "refund_details_section",
   "refund_id",
   "section_break_lsxh",
@@ -113,7 +115,7 @@
    "fieldname": "fee",
    "fieldtype": "Currency",
    "label": "Fee",
-   "options": "currency",
+   "options": "base_currency",
    "read_only": 1
   },
   {
@@ -127,7 +129,7 @@
    "fieldname": "tax",
    "fieldtype": "Currency",
    "label": "Tax",
-   "options": "currency",
+   "options": "base_currency",
    "read_only": 1
   },
   {
@@ -204,12 +206,26 @@
    "fieldtype": "Data",
    "label": "Customer ID",
    "read_only": 1
+  },
+  {
+   "fieldname": "base_amount",
+   "fieldtype": "Currency",
+   "label": "Base Amount",
+   "options": "base_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "base_currency",
+   "fieldtype": "Link",
+   "label": "Base Currency",
+   "options": "Currency",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-26 21:33:18.368146",
- "modified_by": "Administrator",
+ "modified": "2025-07-29 15:07:56.476647",
+ "modified_by": "hussain@frappe.io",
  "module": "Razorpay Integration",
  "name": "Razorpay Order",
  "naming_rule": "Autoincrement",
@@ -228,6 +244,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
