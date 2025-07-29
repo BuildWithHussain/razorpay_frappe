@@ -127,6 +127,9 @@ class RazorpayOrder(Document):
 			client = get_razorpay_client()
 			payment_entity = client.payment.fetch(self.payment_id)
 
+		frappe.errprint("Payment Entity: ")
+		frappe.errprint(payment_entity)
+
 		self.payment_id = payment_entity.get("id")
 		self.fee = convert_from_razorpay_money(payment_entity.get("fee", 0))
 		self.tax = convert_from_razorpay_money(payment_entity.get("tax", 0))
