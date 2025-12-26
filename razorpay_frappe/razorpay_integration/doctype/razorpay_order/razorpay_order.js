@@ -26,6 +26,6 @@ frappe.ui.form.on("Razorpay Order", {
 		frm.add_web_link(
 			`https://dashboard.razorpay.com/app/orders/${frm.doc.order_id}?init_point=orders-table&init_page=Transactions.Orders`,
 			"View in Razorpay Dashboard"
-		)
+		);
 	},
 });
