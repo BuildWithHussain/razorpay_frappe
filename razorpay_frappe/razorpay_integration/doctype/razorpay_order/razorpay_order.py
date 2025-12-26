@@ -133,7 +133,6 @@ class RazorpayOrder(Document):
 		frappe.errprint(payment_entity)
 
 		self.payment_id = payment_entity.get("id")
-		frappe.errprint(payment_entity)
 
 		self.fee = convert_from_razorpay_money(
 			payment_entity.get("fee", 0) or 0
