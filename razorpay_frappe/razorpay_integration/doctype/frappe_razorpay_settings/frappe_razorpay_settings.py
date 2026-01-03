@@ -21,5 +21,3 @@ class FrappeRazorpaySettings(Document):
 	# end: auto-generated types
 
 	pass
-
-

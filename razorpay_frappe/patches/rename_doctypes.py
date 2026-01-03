@@ -15,7 +15,9 @@ def rename_doctypes():
 		new = doctypes[old]
 		if not frappe.db.exists("DocType", new):
 			print(f"Renaming {old} to {new}")
-			frappe.rename_doc("DocType", old, new, force=True, ignore_if_exists=True)
+			frappe.rename_doc(
+				"DocType", old, new, force=True, ignore_if_exists=True
+			)
 
 
 def create_sequences():
@@ -25,4 +27,6 @@ def create_sequences():
 	last_name = frappe.db.get_all(doctype, fields=["max(name) as last"])[0].last
 	start_value = (last_name or 0) + 1
 	print(f"Creating sequence for {doctype} starting at {start_value}")
-	frappe.db.create_sequence(doctype, start_value=start_value, check_not_exists=True)
+	frappe.db.create_sequence(
+		doctype, start_value=start_value, check_not_exists=True
+	)

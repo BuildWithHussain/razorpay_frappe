@@ -5,7 +5,11 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils.data import get_timestamp
 
-from razorpay_frappe.utils import get_in_razorpay_money, get_razorpay_client, convert_from_razorpay_money
+from razorpay_frappe.utils import (
+	convert_from_razorpay_money,
+	get_in_razorpay_money,
+	get_razorpay_client,
+)
 
 
 class RazorpayPaymentLink(Document):
@@ -27,7 +31,9 @@ class RazorpayPaymentLink(Document):
 		expire_by: DF.Date | None
 		id: DF.Data | None
 		short_url: DF.Data | None
-		status: DF.Literal["Created", "Partially Paid", "Expired", "Cancelled", "Paid"]
+		status: DF.Literal[
+			"Created", "Partially Paid", "Expired", "Cancelled", "Paid"
+		]
 		type: DF.Literal["Standard", "UPI"]
 	# end: auto-generated types
 
@@ -73,13 +79,18 @@ class RazorpayPaymentLink(Document):
 
 	def create_or_update_order(self, order_id: str):
 		client = get_razorpay_client()
-		order_already_exists = frappe.db.exists("Razorpay Order", {"order_id": order_id})
+		order_already_exists = frappe.db.exists(
+			"Razorpay Order", {"order_id": order_id}
+		)
 
 		if order_already_exists:
-			frappe.get_doc("Razorpay Order", {"order_id": order_id}).sync_status()
+			frappe.get_doc(
+				"Razorpay Order", {"order_id": order_id}
+			).sync_status()
 		else:
 			razorpay_order = client.order.fetch(order_id)
-			order_doc = frappe.get_doc(doctype="Razorpay Order",
+			order_doc = frappe.get_doc(
+				doctype="Razorpay Order",
 				order_id=order_id,
 				amount=convert_from_razorpay_money(razorpay_order["amount"]),
 				currency=razorpay_order["currency"],

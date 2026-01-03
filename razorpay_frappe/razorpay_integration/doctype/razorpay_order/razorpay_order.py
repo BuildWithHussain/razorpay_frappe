@@ -40,7 +40,9 @@ class RazorpayOrder(Document):
 		ref_dn: DF.DynamicLink | None
 		ref_dt: DF.Link | None
 		refund_id: DF.Data | None
-		status: DF.Literal["Pending", "Failed", "Paid", "Refund in Progress", "Refunded"]
+		status: DF.Literal[
+			"Pending", "Failed", "Paid", "Refund in Progress", "Refunded"
+		]
 		subscription: DF.Link | None
 		tax: DF.Currency
 		type: DF.Literal["Standalone", "Payment Link", "Subscription"]
@@ -134,7 +136,9 @@ class RazorpayOrder(Document):
 		self.fee = convert_from_razorpay_money(payment_entity.get("fee", 0))
 		self.tax = convert_from_razorpay_money(payment_entity.get("tax", 0))
 		if payment_entity.get("base_currency"):
-			self.base_amount = convert_from_razorpay_money(payment_entity.get("base_amount", 0))
+			self.base_amount = convert_from_razorpay_money(
+				payment_entity.get("base_amount", 0)
+			)
 			self.base_currency = payment_entity.get("base_currency")
 		self.method = payment_entity.get("method")
 		self.contact = payment_entity.get("contact")
@@ -169,7 +173,9 @@ class RazorpayOrder(Document):
 
 		if order["status"] == "paid":
 			frappe.errprint(payments)
-			if not self.payment_id or (payments[-1]["status"] == "captured" and self.status != "Paid"):
+			if not self.payment_id or (
+				payments[-1]["status"] == "captured" and self.status != "Paid"
+			):
 				self.status = "Paid"
 				self.payment_id = payments[-1]["id"]
 			elif payments[-1]["status"] == "refunded":

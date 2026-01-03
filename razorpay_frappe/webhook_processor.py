@@ -80,7 +80,6 @@ class WebhookProcessor:
 		except frappe.DoesNotExistError:
 			frappe.log_error("Razorpay Order not found!")
 
-
 	@property
 	def is_standalone_order(self) -> bool:
 		order_id = self.get_payment_order_id()
