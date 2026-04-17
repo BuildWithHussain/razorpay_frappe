@@ -44,7 +44,7 @@
  "modified": "2024-05-08 23:33:26.634831",
  "modified_by": "Administrator",
  "module": "Razorpay Integration",
- "name": "Razorpay Settings",
+ "name": "Frappe Razorpay Settings",
  "owner": "Administrator",
  "permissions": [
   {

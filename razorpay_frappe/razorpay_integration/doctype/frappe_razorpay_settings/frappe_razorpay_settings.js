@@ -1,7 +1,7 @@
 // Copyright (c) 2024, Build With Hussain and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on("Razorpay Settings", {
+frappe.ui.form.on("Frappe Razorpay Settings", {
 	refresh(frm) {
 		frm.sidebar
 			.add_user_action(__("Copy Webhook Endpoint"))
