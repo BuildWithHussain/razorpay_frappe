@@ -21,5 +21,3 @@ class RazorpaySettings(Document):
 	# end: auto-generated types
 
 	pass
-
-
