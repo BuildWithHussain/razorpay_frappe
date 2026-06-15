@@ -39,9 +39,9 @@ def get_razorpay_client():
             None
         )
         key_secret = razorpay_settings.get_password(
-            "api_secret"
+            "api_secret", raise_exception=False
         ) or razorpay_settings.get_password(
-            "key_secret"
+            "key_secret", raise_exception=False
         )
     else:
         key_id = os.environ.get(
